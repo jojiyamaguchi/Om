@@ -5,29 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UDP通信</title>
     <script>
-        async function sendUDPMessage() {
-            const host = document.getElementById('host').value;
-            const port = document.getElementById('port').value;
-            const message = new Uint8Array([0x02, 0x00, 0x01, 0x00, 0x04, 0x00, 0x03, 0x00, 0x04, 0x00]);
-
-            try {
-                const socket = new WebSocket(`wss://${host}:${port}`);
-                socket.binaryType = 'arraybuffer';
-
-                socket.onopen = () => {
-                    socket.send(message);
-                    alert('メッセージが送信されました');
-                };
-
-                socket.onerror = (error) => {
-                    console.error('エラーが発生しました:', error);
-                    alert('メッセージの送信に失敗しました');
-                };
-            } catch (error) {
-                console.error('エラーが発生しました:', error);
-                alert('メッセージの送信に失敗しました');
-            }
-        }
+    function sendUDPMessage()  {
+        const message = new Uint8Array([0x02, 0x00, 0x01, 0x00, 0x04, 0x00, 0x03, 0x00, 0x04, 0x00]);
+        fetch('http://localhost:50000/send-udp-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: message })
+        });
+    }
     </script>
 </head>
 <body>
